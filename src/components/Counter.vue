@@ -1,38 +1,57 @@
 <template>
   <div class="hello">
-    <div class="bg-gray-300 h-64 w-4/6 mx-auto shadow-md flex flex-col justify-center items-center">
+    <div
+      class="bg-gray-300 h-64 w-4/6 mx-auto shadow-md flex flex-col justify-center items-center"
+    >
       <h3 class="text-xl font-semibold">Increment Counter</h3>
       <button
         class="bg-red-500 text-blue-900 border rounded-lg px-8 m-4 h-10 text-2xl font-bold focus:outline-none"
         @click="inc()"
-      >Press Me</button>
-      <h5 class="text-3xl">Counter: {{count.counter}}</h5>
+      >
+        Add 1
+      </button>
+      <button
+        class="bg-red-500 text-blue-900 border rounded-lg px-8 m-4 h-10 text-2xl font-bold focus:outline-none"
+        @click="actionInc()"
+      >
+        Add 2
+      </button>
+      <h5 class="text-3xl">Counter: {{ count.counter }}</h5>
+      {{ doubleCounter }}
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, ref, computed } from "vue";
+import { useStore, ActionTypes, MutationTypes } from "../store";
 
 export default defineComponent({
   setup() {
     const store = useStore();
     const count = ref(store.state);
     const inc = () => {
-      store.commit("increment");
+      store.commit(MutationTypes.INC_COUNTER, 1);
     };
+
+    const actionInc = () => {
+      store.dispatch(ActionTypes.INC_COUNTER, 2);
+    };
+
+    const doubleCounter = computed(() => store.getters.doubleCounter);
 
     return {
       count,
       inc,
+      actionInc,
+      doubleCounter
     };
   },
   name: "HelloWorld",
   props: {
-    msg: String,
+    msg: String
   },
-  methods: {},
+  methods: {}
 });
 </script>
 
